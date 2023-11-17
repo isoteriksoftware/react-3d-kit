@@ -1,5 +1,7 @@
 import { PropsWithChildren } from "react";
 
+export const THEME_NO_PROVIDER = Symbol("THEME_NO_PROVIDER");
+
 export interface PaletteProps {
   main?: string;
   light?: string;
@@ -7,7 +9,7 @@ export interface PaletteProps {
   contrastText?: string;
 }
 
-export interface Theme {
+export interface ThemeOptions {
   type?: "light" | "dark";
   direction?: "auto" | "ltr" | "rtl";
   palette?: {
@@ -24,8 +26,8 @@ export interface Theme {
   [propName: string]: any;
 }
 
-export type ThemeProviderProps = PropsWithChildren<{
-  theme?: Theme;
-}>;
+export type Theme<T = {}> = T & ThemeOptions;
 
-export const THEME_NO_PROVIDER = Symbol("THEME_NO_PROVIDER");
+export type ThemeProviderProps<T> = PropsWithChildren<{
+  theme?: T;
+}>;

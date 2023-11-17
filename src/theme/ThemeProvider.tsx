@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Theme, ThemeProviderProps } from "./types";
-import { ThemeContext } from "./ThemeContext";
+import { ThemeContext } from "./context";
 import { getContrastTextColor } from "../utils/colors";
 
 const defaultTheme: Theme = {
@@ -43,11 +43,11 @@ const defaultTheme: Theme = {
   },
 };
 
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({
+export const ThemeProvider = <T extends {} = {}>({
   theme,
   children,
-}) => {
-  const mergedTheme: Theme = useMemo(() => {
+}: ThemeProviderProps<T>) => {
+  const mergedTheme = useMemo(() => {
     const merged = { ...defaultTheme, ...theme };
 
     return {

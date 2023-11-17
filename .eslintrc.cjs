@@ -30,7 +30,8 @@ module.exports = {
     "@typescript-eslint/no-empty-function":"error",
     "react/no-unknown-property":"off",
     "react/no-unescaped-entities ":"off",
-    "padding-line-between-statements": "off"
+    "padding-line-between-statements": "off",
+    "@typescript-eslint/ban-types": "off",
   },
   "settings": {
     "import/resolver": {
