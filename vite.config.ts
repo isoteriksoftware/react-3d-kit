@@ -19,6 +19,11 @@ export default defineConfig((configEnv) => ({
       include: ["src/components", "src/core", "src/index.ts"],
     }),
   ],
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./src/test/setupTests.ts",
+  },
   build: {
     lib: {
       entry: resolve("src", "index.ts"),
@@ -40,6 +45,12 @@ export default defineConfig((configEnv) => ({
     },
   },
   optimizeDeps: {
-    exclude: ["react", "react-dom", "three", "@react-three/fiber", "@react-three/drei"],
+    exclude: [
+      "react",
+      "react-dom",
+      "three",
+      "@react-three/fiber",
+      "@react-three/drei",
+    ],
   },
 }));

@@ -29,5 +29,5 @@ export interface ThemeOptions {
 export type Theme<T = {}> = T & ThemeOptions;
 
 export type ThemeProviderProps<T> = PropsWithChildren<{
-  theme?: T;
+  theme?: Theme<T>;
 }>;

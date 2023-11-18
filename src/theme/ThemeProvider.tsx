@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Theme, ThemeProviderProps } from "./types";
-import { ThemeContext } from "./context";
+import { ThemeContext } from "./ThemeContext";
 import { getContrastTextColor } from "../utils/colors";
 
 const defaultTheme: Theme = {
