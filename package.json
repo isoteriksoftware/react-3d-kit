@@ -11,7 +11,10 @@
     "lint:fix": "eslint --fix 'src/**/*.{jsx,ts,tsx}'",
     "preview": "vite preview",
     "format": "prettier --write src//**/*.{ts,tsx} --config ./.prettierrc",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "husky": {
     "hooks": {
@@ -37,19 +40,24 @@
   "main": "./dist/react-3d-kit.umd.js",
   "module": "./dist/react-3d-kit.es.js",
   "types": "./dist/index.d.ts",
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
-    "react": ">=18.2.0",
-    "react-dom": ">=18.2.0",
     "@react-three/drei": ">=9.88.11",
     "@react-three/fiber": ">=8.15.10",
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0",
     "three": ">=0.158.0"
   },
   "devDependencies": {
+    "@react-three/drei": "^9.88.11",
+    "@react-three/fiber": "^8.15.10",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.1.2",
+    "@types/jest": "^29.5.8",
     "@types/node": "^20.9.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
+    "@types/testing-library__react": "^10.2.0",
     "@types/three": "^0.158.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
@@ -60,19 +68,19 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "husky": "^8.0.3",
+    "jest": "^29.7.0",
     "lint-staged": "^15.0.2",
     "prettier": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hooks": "^1.0.1",
-    "typescript": "^5.0.2",
+    "three": "^0.158.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2",
     "vite": "^4.4.5",
     "vite-plugin-dts": "^3.6.3",
     "vite-plugin-linter": "^2.0.7",
-    "vite-tsconfig-paths": "^4.2.1",
-    "@react-three/drei": "^9.88.11",
-    "@react-three/fiber": "^8.15.10",
-    "three": "^0.158.0"
+    "vite-tsconfig-paths": "^4.2.1"
   },
   "repository": {
     "type": "git",
