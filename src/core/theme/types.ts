@@ -1,5 +1,6 @@
 import { PropsWithChildren } from "react";
 import { Color } from "@react-three/fiber";
+import { FontData } from "@react-three/drei";
 
 export const THEME_NO_PROVIDER = Symbol("THEME_NO_PROVIDER");
 
@@ -22,7 +23,7 @@ export interface ThemeOptions {
     success?: PaletteProps;
   };
   typography?: {
-    font?: string;
+    font?: string | FontData | { [key: string]: any };
     color?: Color;
   };
   [propName: string]: any;
@@ -33,3 +34,11 @@ export type Theme<T = {}> = T & ThemeOptions;
 export type ThemeProviderProps<T> = PropsWithChildren<{
   theme?: Theme<T>;
 }>;
+
+export type ColorClass =
+  | "primary"
+  | "secondary"
+  | "error"
+  | "warning"
+  | "info"
+  | "success";

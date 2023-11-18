@@ -19,7 +19,7 @@
     "declarationMap": true,
     "baseUrl": ".",
     "paths": {
-      "react-gallery-3d": [ "src/index.ts" ]
+      "react-3d-kit": [ "src/index.ts" ]
     },
     "typeRoots": [
       "node_modules/@types",

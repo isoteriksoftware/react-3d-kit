@@ -1,10 +1,13 @@
-import { Color } from "@react-three/fiber";
+import { Color, MeshProps } from "@react-three/fiber";
 import { ReactNode } from "react";
+import { TextGeometryParameters } from "three/examples/jsm/geometries/TextGeometry";
+import { FontData } from "@react-three/drei";
+import { ColorClass } from "../theme";
 
 export type TypographyProps = JSX.IntrinsicElements["mesh"] & {
   children: ReactNode;
   characters?: string;
-  color?: Color;
+  color?: ColorClass | Color;
   fontSize?: number;
   maxWidth?: number;
   lineHeight?: number;
@@ -38,3 +41,14 @@ export type TypographyProps = JSX.IntrinsicElements["mesh"] & {
   debugSDF?: boolean;
   onSync?: (troika: any) => void;
 };
+
+export type Typography3DProps = Omit<TextGeometryParameters, "font"> &
+  MeshProps & {
+    font: FontData | string;
+    bevelSegments?: number;
+    smooth?: number;
+    lineHeight?: number;
+    letterSpacing?: number;
+    useCustomMaterial?: boolean;
+    color?: ColorClass | Color;
+  };

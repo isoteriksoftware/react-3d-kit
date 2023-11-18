@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import { Theme, ThemeProviderProps } from "./types";
 import { ThemeContext } from "./ThemeContext";
-import { getContrastTextColor } from "../../utils/colors";
+import { getContrastTextColor } from "../../utils";
+import LatoRegular from "../assets/fonts/Lato_Regular.json";
 
 export const defaultTheme: Theme = {
   type: "dark",
@@ -39,7 +40,7 @@ export const defaultTheme: Theme = {
     },
   },
   typography: {
-    font: "./fonts/Lato_Regular.json",
+    font: LatoRegular,
     color: "#ffffff",
   },
 };
@@ -91,6 +92,10 @@ export const ThemeProvider = <T extends {} = {}>({
             merged.palette?.success?.main as string,
           ),
         },
+      },
+      typography: {
+        ...defaultTheme.typography,
+        ...theme?.typography,
       },
     };
   }, [theme]);

@@ -1,3 +1,5 @@
+import { ColorClass } from "../core/theme";
+
 export const getContrastTextColor = (hexColor: string): string => {
   const rgb = hexToRgb(hexColor);
   if (!rgb) return "#000";
@@ -25,4 +27,16 @@ export const calculateLuminance = (r: number, g: number, b: number): number => {
     return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
   });
   return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
+};
+
+export const isColorClass = (value: any): value is ColorClass => {
+  const validColorClasses = [
+    "primary",
+    "secondary",
+    "error",
+    "warning",
+    "info",
+    "success",
+  ];
+  return validColorClasses.includes(value);
 };
