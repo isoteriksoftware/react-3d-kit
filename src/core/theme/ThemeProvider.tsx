@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Theme, ThemeProviderProps } from "./types";
 import { ThemeContext } from "./ThemeContext";
-import { getContrastTextColor } from "../utils/colors";
+import { getContrastTextColor } from "../../utils/colors";
 
 export const defaultTheme: Theme = {
   type: "dark",
@@ -40,6 +40,7 @@ export const defaultTheme: Theme = {
   },
   typography: {
     font: "./fonts/Lato_Regular.json",
+    color: "#ffffff",
   },
 };
 

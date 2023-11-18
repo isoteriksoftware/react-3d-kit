@@ -1,12 +1,13 @@
 import { PropsWithChildren } from "react";
+import { Color } from "@react-three/fiber";
 
 export const THEME_NO_PROVIDER = Symbol("THEME_NO_PROVIDER");
 
 export interface PaletteProps {
-  main?: string;
-  light?: string;
-  dark?: string;
-  contrastText?: string;
+  main?: Color;
+  light?: Color;
+  dark?: Color;
+  contrastText?: Color;
 }
 
 export interface ThemeOptions {
@@ -22,6 +23,7 @@ export interface ThemeOptions {
   };
   typography?: {
     font?: string;
+    color?: Color;
   };
   [propName: string]: any;
 }
