@@ -3,7 +3,7 @@ import { Theme, ThemeProviderProps } from "./types";
 import { ThemeContext } from "./ThemeContext";
 import { getContrastTextColor } from "../utils/colors";
 
-const defaultTheme: Theme = {
+export const defaultTheme: Theme = {
   type: "dark",
   direction: "ltr",
   palette: {
