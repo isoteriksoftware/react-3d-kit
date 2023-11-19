@@ -21,7 +21,7 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     width,
     height,
     depth = 2,
-    radius = 0.3,
+    radius = 1,
     smoothness = 16,
     wobble,
     wobbleSpeed = 1,
