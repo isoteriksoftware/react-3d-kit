@@ -40,9 +40,7 @@
   "main": "./dist/react-3d-kit.umd.js",
   "module": "./dist/react-3d-kit.es.js",
   "types": "./dist/index.d.ts",
-  "dependencies": {
-    "@react-spring/three": "^9.0.0"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@react-three/drei": ">=9.88.11",
     "@react-three/fiber": ">=8.15.10",
