@@ -24,6 +24,8 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     wobble,
     wobbleSpeed = 1,
     wobbleIntensity = 0.2,
+    onPointerOver,
+    onPointerOut,
     ...rest
   } = props;
 
@@ -38,7 +40,7 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     "background",
   );
   const resolvedHoverColor = useResolvedThemeColor(
-    hoverColor,
+    hoverColor ?? color,
     theme,
     "dark",
     "background",
@@ -50,9 +52,19 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
       args={[width, height, depth]}
       radius={radius}
       smoothness={smoothness}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
       {...rest}
+      onPointerOver={(evt) => {
+        setHovered(true);
+        if (onPointerOver) {
+          onPointerOver(evt);
+        }
+      }}
+      onPointerOut={(evt) => {
+        setHovered(false);
+        if (onPointerOut) {
+          onPointerOut(evt);
+        }
+      }}
     >
       {!useCustomMaterial &&
         (wobble ? (

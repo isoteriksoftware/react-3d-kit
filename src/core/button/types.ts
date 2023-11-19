@@ -16,6 +16,4 @@ export type ButtonProps = Omit<MeshProps, "args"> & {
   wobble?: boolean;
   wobbleSpeed?: number;
   wobbleIntensity?: number;
-  onClick?: () => void;
-  onHover?: () => void;
 };
