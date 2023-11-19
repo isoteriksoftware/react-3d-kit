@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { Color, Mesh } from "three";
+import { Mesh } from "three";
 import { ButtonProps } from "./types";
 import {
   Center,
@@ -8,7 +8,7 @@ import {
   useCursor,
 } from "@react-three/drei";
 import { useTheme } from "../theme";
-import { useResolvedThemeColor } from "react-3d-kit";
+import { useResolvedThemeColor, useRgbaToColorConverter } from "../../utils";
 import { ThreeEvent, useFrame } from "@react-three/fiber";
 import { useSpring } from "@react-spring/three";
 
@@ -32,7 +32,6 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
   } = props;
 
   const materialRef = useRef<any>(null!);
-  const colorRef = useRef(new Color("white"));
 
   const [hovered, setHovered] = useState(false);
   useCursor(hovered);
@@ -57,6 +56,7 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     }),
     [resolvedColor],
   );
+  const rgbaConverter = useRgbaToColorConverter();
 
   useEffect(() => {
     if (hovered) {
@@ -80,19 +80,9 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     }
   };
 
-  const rgbaStringToThreeColor = (rgbaString: string): Color => {
-    const [r, g, b] = rgbaString.match(/\d+/g)?.map(Number).slice(0, 3) || [
-      0, 0, 0,
-    ];
-    colorRef.current.set(`rgb(${r}, ${g}, ${b})`);
-    return colorRef.current;
-  };
-
   useFrame(() => {
     if (materialRef.current && springs.color) {
-      materialRef.current.color = rgbaStringToThreeColor(
-        springs.color.get() as string,
-      );
+      materialRef.current.color = rgbaConverter(springs.color.get() as string);
     }
   });
 
