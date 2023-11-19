@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 import { Mesh } from "three";
 import { ButtonProps } from "./types";
 import {
@@ -8,7 +8,7 @@ import {
   useCursor,
 } from "@react-three/drei";
 import { useTheme } from "../theme";
-import { useResolvedThemeColor, useRgbaToColorConverter } from "../../utils";
+import { useResolvedThemeColor } from "../../utils";
 import { ThreeEvent, useFrame } from "@react-three/fiber";
 import { useSpring } from "@react-spring/three";
 
@@ -50,21 +50,9 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     "background",
   );
 
-  const [springs, api] = useSpring(
-    () => ({
-      color: resolvedColor,
-    }),
-    [resolvedColor],
-  );
-  const rgbaConverter = useRgbaToColorConverter();
-
-  useEffect(() => {
-    if (hovered) {
-      api.start({ color: resolvedHoverColor });
-    } else {
-      api.start({ color: resolvedColor });
-    }
-  }, [api, hovered, resolvedColor, resolvedHoverColor]);
+  const { color: finalColor } = useSpring({
+    color: hovered ? resolvedHoverColor : resolvedColor,
+  });
 
   const handlePointerOver = (evt: ThreeEvent<PointerEvent>) => {
     setHovered(true);
@@ -81,8 +69,8 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
   };
 
   useFrame(() => {
-    if (materialRef.current && springs.color) {
-      materialRef.current.color = rgbaConverter(springs.color.get() as string);
+    if (materialRef.current && finalColor) {
+      materialRef.current.color.setStyle(finalColor.get());
     }
   });
 

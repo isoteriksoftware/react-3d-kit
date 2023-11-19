@@ -24,6 +24,8 @@ export const useResolvedThemeColor = (
           : theme.palette?.primary?.[variant];
     } else if (isColorClass(color)) {
       finalColor = theme.palette?.[color]?.[variant];
+    } else {
+      finalColor = color;
     }
 
     if (finalColor instanceof ThreeColor) {
