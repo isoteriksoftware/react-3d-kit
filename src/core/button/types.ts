@@ -1,5 +1,6 @@
 import { ColorClass } from "../theme";
 import { Color, MeshProps } from "@react-three/fiber";
+import { TypographyProps } from "../typography";
 
 export type ButtonProps = Omit<MeshProps, "args"> & {
   width?: number;
@@ -16,4 +17,6 @@ export type ButtonProps = Omit<MeshProps, "args"> & {
   wobble?: boolean;
   wobbleSpeed?: number;
   wobbleIntensity?: number;
+  text?: string;
+  textProps?: Omit<TypographyProps, "ref">;
 };

@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useState } from "react";
+import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { Mesh } from "three";
 import { ButtonProps } from "./types";
 import {
@@ -11,6 +11,7 @@ import { useTheme } from "../theme";
 import { useResolvedThemeColor } from "../../utils";
 import { ThreeEvent, useFrame } from "@react-three/fiber";
 import { useSpring } from "@react-spring/three";
+import { Typography } from "../typography";
 
 export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
   const {
@@ -18,7 +19,7 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     useCustomMaterial,
     color,
     hoverColor,
-    width = 10,
+    width,
     height = 5,
     depth = 2,
     radius = 0.3,
@@ -28,10 +29,13 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     wobbleIntensity = 0.2,
     onPointerOver,
     onPointerOut,
+    text,
+    textProps,
     ...rest
   } = props;
 
-  const materialRef = useRef<any>(null!);
+  const materialRef = useRef<any>(null);
+  const textRef = useRef<any>(null);
 
   const [hovered, setHovered] = useState(false);
   useCursor(hovered);
@@ -50,9 +54,40 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     "background",
   );
 
-  const { color: finalColor } = useSpring({
+  const resolvedTextColor = useResolvedThemeColor(
+    color,
+    theme,
+    "contrastText",
+    "background",
+  );
+
+  const { color: currentColor } = useSpring({
     color: hovered ? resolvedHoverColor : resolvedColor,
   });
+
+  const {
+    fontSize = 3,
+    color: textColor = resolvedTextColor,
+    ...restTextProps
+  } = textProps || {};
+
+  const resolvedWidth = useMemo(() => {
+    if (width) {
+      return width;
+    }
+
+    if (text) {
+      return text.length * fontSize;
+    }
+
+    return 10;
+  }, [fontSize, text, width]);
+
+  useEffect(() => {
+    if (textRef.current) {
+      textRef.current.position.z = depth / 2 + 0.1;
+    }
+  }, [depth]);
 
   const handlePointerOver = (evt: ThreeEvent<PointerEvent>) => {
     setHovered(true);
@@ -69,15 +104,15 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
   };
 
   useFrame(() => {
-    if (materialRef.current && finalColor) {
-      materialRef.current.color.setStyle(finalColor.get());
+    if (materialRef.current && currentColor) {
+      materialRef.current.color.setStyle(currentColor.get());
     }
   });
 
   return (
     <RoundedBox
       ref={ref}
-      args={[width, height, depth]}
+      args={[resolvedWidth, height, depth]}
       radius={radius}
       smoothness={smoothness}
       {...rest}
@@ -95,7 +130,22 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
           <meshStandardMaterial ref={materialRef} />
         ))}
 
-      <Center>{children}</Center>
+      {text && (
+        <Center>
+          <Typography
+            fontSize={fontSize}
+            color={textColor}
+            ref={textRef}
+            textAlign="center"
+            anchorX="center"
+            anchorY="middle"
+            {...restTextProps}
+          >
+            {text}
+          </Typography>
+        </Center>
+      )}
+      {children}
     </RoundedBox>
   );
 });
