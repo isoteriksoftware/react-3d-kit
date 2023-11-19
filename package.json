@@ -40,7 +40,9 @@
   "main": "./dist/react-3d-kit.umd.js",
   "module": "./dist/react-3d-kit.es.js",
   "types": "./dist/index.d.ts",
-  "dependencies": {},
+  "dependencies": {
+    "gsap": "^3.12.2"
+  },
   "peerDependencies": {
     "@react-three/drei": ">=9.88.11",
     "@react-three/fiber": ">=8.15.10",
