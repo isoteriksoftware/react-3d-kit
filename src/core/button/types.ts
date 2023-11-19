@@ -18,5 +18,7 @@ export type ButtonProps = Omit<MeshProps, "args"> & {
   wobbleSpeed?: number;
   wobbleIntensity?: number;
   text?: string;
-  textProps?: Omit<TypographyProps, "ref">;
+  textProps?: Omit<TypographyProps, "ref" | "children"> & {
+    zOffset?: number;
+  };
 };

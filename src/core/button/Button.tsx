@@ -57,7 +57,12 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     color: hovered ? resolvedHoverColor : resolvedColor,
   });
 
-  const { fontSize = 3, color: textColor, ...restTextProps } = textProps || {};
+  const {
+    fontSize = 3,
+    color: textColor,
+    zOffset,
+    ...restTextProps
+  } = textProps || {};
 
   const resolvedTextColor = useResolvedThemeColor(
     textColor || color,
@@ -97,9 +102,9 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
       const textWidth = text ? fontSize * text.length * 0.5 : 0;
 
       textRef.current.position.x = -textWidth + resolvedWidth / 2;
-      textRef.current.position.z = depth / 2 + 0.1;
+      textRef.current.position.z = zOffset || depth / 2 + 0.1;
     }
-  }, [depth, fontSize, resolvedHeight, resolvedWidth, text]);
+  }, [depth, fontSize, resolvedHeight, resolvedWidth, text, zOffset]);
 
   const handlePointerOver = (evt: ThreeEvent<PointerEvent>) => {
     setHovered(true);
