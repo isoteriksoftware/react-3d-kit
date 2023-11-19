@@ -1,12 +1,7 @@
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { Mesh } from "three";
 import { ButtonProps } from "./types";
-import {
-  Center,
-  MeshWobbleMaterial,
-  RoundedBox,
-  useCursor,
-} from "@react-three/drei";
+import { MeshWobbleMaterial, RoundedBox, useCursor } from "@react-three/drei";
 import { useTheme } from "../theme";
 import {
   getContrastTextColor,
@@ -24,7 +19,7 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     color,
     hoverColor,
     width,
-    height = 5,
+    height,
     depth = 2,
     radius = 0.3,
     smoothness = 16,
@@ -71,17 +66,13 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     "background",
   );
 
-  const resolvedWidth = useMemo(() => {
-    if (width) {
-      return width;
-    }
+  const [resolvedWidth, resolvedHeight] = useMemo(() => {
+    const btnWidth = width || (text ? fontSize * text.length : 10);
+    const btnHeight = height || fontSize * 2.5;
 
-    if (text) {
-      return text.length * fontSize;
-    }
+    return [btnWidth, btnHeight];
+  }, [fontSize, height, text, width]);
 
-    return 10;
-  }, [fontSize, text, width]);
   const finalTextColor = useMemo(() => {
     if (textColor) {
       return textColor;
@@ -103,9 +94,12 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
 
   useEffect(() => {
     if (textRef.current) {
+      const textWidth = text ? fontSize * text.length * 0.5 : 0;
+
+      textRef.current.position.x = -textWidth + resolvedWidth / 2;
       textRef.current.position.z = depth / 2 + 0.1;
     }
-  }, [depth]);
+  }, [depth, fontSize, resolvedHeight, resolvedWidth, text]);
 
   const handlePointerOver = (evt: ThreeEvent<PointerEvent>) => {
     setHovered(true);
@@ -130,7 +124,7 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
   return (
     <RoundedBox
       ref={ref}
-      args={[resolvedWidth, height, depth]}
+      args={[resolvedWidth, resolvedHeight, depth]}
       radius={radius}
       smoothness={smoothness}
       {...rest}
@@ -149,19 +143,17 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
         ))}
 
       {text && (
-        <Center>
-          <Typography
-            fontSize={fontSize}
-            color={finalTextColor}
-            ref={textRef}
-            textAlign="center"
-            anchorX="center"
-            anchorY="middle"
-            {...restTextProps}
-          >
-            {text}
-          </Typography>
-        </Center>
+        <Typography
+          fontSize={fontSize}
+          color={finalTextColor}
+          ref={textRef}
+          textAlign="center"
+          anchorX="center"
+          anchorY="middle"
+          {...restTextProps}
+        >
+          {text}
+        </Typography>
       )}
       {children}
     </RoundedBox>
