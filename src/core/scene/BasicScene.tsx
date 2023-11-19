@@ -26,7 +26,7 @@ export const BasicScene: React.FC<BasicSceneProps> = ({
       scene={{
         background: new Color(0x000000),
       }}
-      camera={{ position: [0, 50, 0], fov: 60 }}
+      camera={{ position: [0, -50, 0], fov: 60, zoom: 1 }}
       {...rest}
     >
       <Suspense fallback={null}>
