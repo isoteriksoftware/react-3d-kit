@@ -1,11 +1,11 @@
-import { ColorClass } from "../core/theme";
+import { ColorClass } from "../core";
 
 export const getContrastTextColor = (hexColor: string): string => {
   const rgb = hexToRgb(hexColor);
   if (!rgb) return "#000";
 
   const luminance = calculateLuminance(rgb.r, rgb.g, rgb.b);
-  return luminance > 0.5 ? "#000000" : "#FFFFFF";
+  return luminance > 0.4 ? "#000000" : "#FFFFFF";
 };
 
 export const hexToRgb = (

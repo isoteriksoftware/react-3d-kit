@@ -8,7 +8,11 @@ import {
   useCursor,
 } from "@react-three/drei";
 import { useTheme } from "../theme";
-import { useResolvedThemeColor } from "../../utils";
+import {
+  getContrastTextColor,
+  isColorClass,
+  useResolvedThemeColor,
+} from "../../utils";
 import { ThreeEvent, useFrame } from "@react-three/fiber";
 import { useSpring } from "@react-spring/three";
 import { Typography } from "../typography";
@@ -54,22 +58,18 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     "background",
   );
 
-  const resolvedTextColor = useResolvedThemeColor(
-    color,
-    theme,
-    "contrastText",
-    "background",
-  );
-
   const { color: currentColor } = useSpring({
     color: hovered ? resolvedHoverColor : resolvedColor,
   });
 
-  const {
-    fontSize = 3,
-    color: textColor = resolvedTextColor,
-    ...restTextProps
-  } = textProps || {};
+  const { fontSize = 3, color: textColor, ...restTextProps } = textProps || {};
+
+  const resolvedTextColor = useResolvedThemeColor(
+    textColor || color,
+    theme,
+    "contrastText",
+    "background",
+  );
 
   const resolvedWidth = useMemo(() => {
     if (width) {
@@ -82,6 +82,24 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
 
     return 10;
   }, [fontSize, text, width]);
+  const finalTextColor = useMemo(() => {
+    if (textColor) {
+      return textColor;
+    }
+
+    if (!resolvedTextColor && typeof resolvedColor === "string") {
+      return getContrastTextColor(resolvedColor);
+    }
+
+    if (
+      resolvedTextColor &&
+      !isColorClass(color) &&
+      typeof resolvedColor === "string"
+    ) {
+      return getContrastTextColor(resolvedColor);
+    }
+    return resolvedTextColor;
+  }, [color, resolvedColor, resolvedTextColor, textColor]);
 
   useEffect(() => {
     if (textRef.current) {
@@ -134,7 +152,7 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
         <Center>
           <Typography
             fontSize={fontSize}
-            color={textColor}
+            color={finalTextColor}
             ref={textRef}
             textAlign="center"
             anchorX="center"
