@@ -41,7 +41,6 @@
   "module": "./dist/react-3d-kit.es.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@react-spring/three": "^9.7.3"
   },
   "peerDependencies": {
     "@react-three/drei": ">=9.88.11",

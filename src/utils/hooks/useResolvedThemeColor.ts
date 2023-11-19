@@ -2,6 +2,7 @@ import { Color } from "@react-three/fiber";
 import { ColorClass, Theme } from "../../core";
 import { useEffect, useState } from "react";
 import { isColorClass } from "../index";
+import { Color as ThreeColor } from "three";
 
 export const useResolvedThemeColor = (
   color: ColorClass | Color | undefined,
@@ -9,7 +10,9 @@ export const useResolvedThemeColor = (
   variant: "main" | "light" | "dark" | "contrastText" = "main",
   type: "text" | "background" = "text",
 ) => {
-  const [resolvedColor, setResolvedColor] = useState<typeof color>();
+  const [resolvedColor, setResolvedColor] = useState<
+    string | number | undefined
+  >();
 
   useEffect(() => {
     let finalColor;
@@ -23,7 +26,11 @@ export const useResolvedThemeColor = (
       finalColor = theme.palette?.[color]?.[variant];
     }
 
-    setResolvedColor(finalColor);
+    if (finalColor instanceof ThreeColor) {
+      finalColor = (finalColor as ThreeColor).getHexString();
+    }
+
+    setResolvedColor(finalColor as typeof resolvedColor);
   }, [color, theme.palette, theme.typography?.color, type, variant]);
 
   return resolvedColor;

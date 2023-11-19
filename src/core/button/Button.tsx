@@ -1,5 +1,5 @@
-import { forwardRef, useState } from "react";
-import { Mesh } from "three";
+import { forwardRef, useEffect, useRef, useState } from "react";
+import { Color, Mesh } from "three";
 import { ButtonProps } from "./types";
 import {
   Center,
@@ -9,6 +9,8 @@ import {
 } from "@react-three/drei";
 import { useTheme } from "../theme";
 import { useResolvedThemeColor } from "react-3d-kit";
+import { ThreeEvent, useFrame } from "@react-three/fiber";
+import { useSpring } from "@react-spring/three";
 
 export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
   const {
@@ -29,6 +31,9 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     ...rest
   } = props;
 
+  const materialRef = useRef<any>(null!);
+  const colorRef = useRef(new Color("white"));
+
   const [hovered, setHovered] = useState(false);
   useCursor(hovered);
 
@@ -46,6 +51,51 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
     "background",
   );
 
+  const [springs, api] = useSpring(
+    () => ({
+      color: resolvedColor,
+    }),
+    [resolvedColor],
+  );
+
+  useEffect(() => {
+    if (hovered) {
+      api.start({ color: resolvedHoverColor });
+    } else {
+      api.start({ color: resolvedColor });
+    }
+  }, [api, hovered, resolvedColor, resolvedHoverColor]);
+
+  const handlePointerOver = (evt: ThreeEvent<PointerEvent>) => {
+    setHovered(true);
+    if (onPointerOver) {
+      onPointerOver(evt);
+    }
+  };
+
+  const handlePointerOut = (evt: ThreeEvent<PointerEvent>) => {
+    setHovered(false);
+    if (onPointerOut) {
+      onPointerOut(evt);
+    }
+  };
+
+  const rgbaStringToThreeColor = (rgbaString: string): Color => {
+    const [r, g, b] = rgbaString.match(/\d+/g)?.map(Number).slice(0, 3) || [
+      0, 0, 0,
+    ];
+    colorRef.current.set(`rgb(${r}, ${g}, ${b})`);
+    return colorRef.current;
+  };
+
+  useFrame(() => {
+    if (materialRef.current && springs.color) {
+      materialRef.current.color = rgbaStringToThreeColor(
+        springs.color.get() as string,
+      );
+    }
+  });
+
   return (
     <RoundedBox
       ref={ref}
@@ -53,30 +103,18 @@ export const Button = forwardRef<Mesh, ButtonProps>((props, ref) => {
       radius={radius}
       smoothness={smoothness}
       {...rest}
-      onPointerOver={(evt) => {
-        setHovered(true);
-        if (onPointerOver) {
-          onPointerOver(evt);
-        }
-      }}
-      onPointerOut={(evt) => {
-        setHovered(false);
-        if (onPointerOut) {
-          onPointerOut(evt);
-        }
-      }}
+      onPointerOver={handlePointerOver}
+      onPointerOut={handlePointerOut}
     >
       {!useCustomMaterial &&
         (wobble ? (
           <MeshWobbleMaterial
-            color={hovered ? resolvedHoverColor : resolvedColor}
             speed={wobbleSpeed}
             factor={wobbleIntensity}
+            ref={materialRef}
           />
         ) : (
-          <meshStandardMaterial
-            color={hovered ? resolvedHoverColor : resolvedColor}
-          />
+          <meshStandardMaterial ref={materialRef} />
         ))}
 
       <Center>{children}</Center>
