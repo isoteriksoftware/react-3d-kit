@@ -1,4 +1,5 @@
 import { ColorClass } from "../core";
+import { Color } from "three";
 
 export const getContrastTextColor = (hexColor: string): string => {
   const rgb = hexToRgb(hexColor);
@@ -39,4 +40,22 @@ export const isColorClass = (value: any): value is ColorClass => {
     "success",
   ];
   return validColorClasses.includes(value);
+};
+
+export const createColorDarkener = () => {
+  const color = new Color();
+
+  return (
+    colorInput: Color | string | number,
+    factor: number = 0.5,
+  ): string => {
+    color.set(colorInput);
+    factor = Math.max(0, Math.min(1, factor));
+
+    color.r *= factor;
+    color.g *= factor;
+    color.b *= factor;
+
+    return "#" + color.getHexString();
+  };
 };
